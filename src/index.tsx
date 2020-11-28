@@ -1,8 +1,8 @@
 import React from 'react';
 import { render} from "react-dom"
-import getAppInstance, { AppState } from './AppState';
 import MainPage from './MainPage/MainPage'
 import FullStory from './Stories/FullStory';
+import 'bootstrap/dist/css/bootstrap.css';
 
 export default interface State {
   isStoryOpen: boolean,
@@ -11,6 +11,7 @@ export default interface State {
 }
 
 class App extends React.Component {
+  interval!: NodeJS.Timer;
   state: State = {
     isStoryOpen: false,
     newStories: [],
@@ -26,19 +27,25 @@ class App extends React.Component {
         return data
   }
 
-  appInstance: AppState = getAppInstance()
-  componentDidMount() {
+  setNewStories() {
     this.getNewStories()
     .then((data) => {
-      this.setState({newStories: data})
-    console.log(this.state.newStories)
+      this.setState({newStories: data.slice(0, 99)})
     })
+  }
+
+  componentDidMount() {
+    this.setNewStories()
+    this.interval = setInterval(() => this.setNewStories(), 60000)
+  }
+  componentWillMount() {
+    clearInterval(this.interval)
   }
   
   render() {
     return (
       <>
-        <MainPage state={this.state} />
+        <MainPage state={this.state} update={() => this.setNewStories()}/>
         {this.state.isStoryOpen &&
           <FullStory state={this.state} />
         }
