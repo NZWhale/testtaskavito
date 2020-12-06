@@ -1,8 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { render} from "react-dom"
 import MainPage from './MainPage/MainPage'
-import FullStory from './Stories/FullStory';
+
+import {Provider} from "react-redux";
+
 import 'bootstrap/dist/css/bootstrap.css';
+import store from './store/store';
+import setNewStories from './store/actionCreators/setNewStories';
+import setNewStoriesIds from './store/actionCreators/setNewStoriesIds';
 
 export default interface State {
   isStoryOpen: boolean,
@@ -30,7 +35,8 @@ class App extends React.Component {
   setNewStories() {
     this.getNewStories()
     .then((data) => {
-      this.setState({newStories: data.slice(0, 99)})
+      const hundredStories = data.slice(0, 99)
+      store.dispatch(setNewStoriesIds(hundredStories))
     })
   }
 
@@ -44,12 +50,10 @@ class App extends React.Component {
   
   render() {
     return (
-      <>
-        <MainPage state={this.state} update={() => this.setNewStories()}/>
-        {this.state.isStoryOpen &&
-          <FullStory state={this.state} />
-        }
-      </>
+      <Provider store={store}>
+        <MainPage />
+        {/* <MainPage update={() => this.setNewStories()}/> */}
+      </Provider>
     )
   }
 }

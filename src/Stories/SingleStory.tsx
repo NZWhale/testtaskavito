@@ -1,7 +1,9 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.css';
+import FullStory from "./FullStory";
 
-interface StoryState {
+export interface StoryState {
+    isFullStoryOpen: boolean;
     by: string,
     descendants: number,
     id: number,
@@ -15,10 +17,12 @@ interface StoryState {
 
 interface StoryProps {
     story: string
+    
 }
 
 export class SingleStory extends React.Component<StoryProps> {
     state: StoryState = {
+        isFullStoryOpen: false,
         by: "",
         descendants: 0,
         id: 0,
@@ -57,7 +61,7 @@ export class SingleStory extends React.Component<StoryProps> {
     render() {
         return (
             <>
-                <div className="card" style={{ marginBottom: "20px" }}>
+                <div className="card" style={{ marginBottom: "20px" }} onClick={() => this.setState({isFullStoryOpen: true})}>
                     <div className="card-header" style={{
                         display: "flex",
                         justifyContent: "space-between"
@@ -74,6 +78,11 @@ export class SingleStory extends React.Component<StoryProps> {
                        <h5>Score: {this.state.score}</h5> {new Date(this.state.time * 1000).toLocaleString("ru-RU")}
                     </div>
                 </div>
+                {this.state.isFullStoryOpen &&
+                <>
+                <FullStory state={this.state}/>
+                </>
+                }
             </>
         )
     }
