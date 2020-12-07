@@ -1,14 +1,10 @@
+import { StateInterface } from "../types"
 
-export interface StateInterface{
-    newStoriesIds: Array<string>,
-    newStories: {},
-    isStoryOpen: boolean,
-    currentStory: Object,
-}
+
 
 const initialState: StateInterface = {
     newStoriesIds: [],
-    newStories: {},
+    newStories: [],
     isStoryOpen: false,
     currentStory: {}
 }

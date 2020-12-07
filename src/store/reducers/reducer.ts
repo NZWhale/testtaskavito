@@ -1,12 +1,6 @@
-import { StateInterface } from "../initialState";
+import { StateInterface } from "../../types";
 import initialState from "../initialState";
 import  Action  from "../../types";
-
-// type Action = {
-//     type: string,
-//     // value: any
-//     value: Array<string> | boolean | object
-// }
 
 
 const reducer = (state = initialState, action: Action<any>): StateInterface => {

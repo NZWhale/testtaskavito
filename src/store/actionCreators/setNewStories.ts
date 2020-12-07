@@ -1,8 +1,8 @@
-import  Action  from "../../types"
+import  Action, { Story }  from "../../types"
 
 const newStoriesAction: string = "SET_NEW_STORIES"
 
-const setNewStories = (value: string): Action<any> => {
+const setNewStories = (value: Array<Story>): Action<any> => {
     return { 
         type: newStoriesAction,
         payload: value

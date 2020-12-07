@@ -1,63 +1,16 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import FullStory from "./FullStory";
+import { connect } from "react-redux";
+import Action, { StateInterface, Story } from "../types";
 
-export interface StoryState {
-    isFullStoryOpen: boolean;
-    by: string,
-    descendants: number,
-    id: number,
-    kids: Array<number>,
-    score: number,
-    time: number,
-    title: string,
-    type: string,
-    url: string
-}
 
 interface StoryProps {
-    story: string
-    
+    story: Story,
+    isStoryOpen: boolean
 }
 
 export class SingleStory extends React.Component<StoryProps> {
-    state: StoryState = {
-        isFullStoryOpen: false,
-        by: "",
-        descendants: 0,
-        id: 0,
-        kids: [],
-        score: 0,
-        time: 0,
-        title: "",
-        type: "",
-        url: ""
-    }
-
-    getSingleStory(storyNumber: string) {
-        let story = fetch(`https://hacker-news.firebaseio.com/v0/item/${storyNumber}.json?print=pretty`)
-            .then(response => response.json())
-            .then((data) => data)
-        return story
-    }
-
-    componentDidMount() {
-        this.getSingleStory(this.props.story)
-            .then((data) => {
-                this.setState({
-                    by: data.by,
-                    descendants: data.descendants,
-                    id: data.id,
-                    kids: data.kids,
-                    score: data.score,
-                    time: data.time,
-                    title: data.title,
-                    type: data.type,
-                    url: data.url,
-                })
-            })
-    }
-
     render() {
         return (
             <>
@@ -66,24 +19,22 @@ export class SingleStory extends React.Component<StoryProps> {
                         display: "flex",
                         justifyContent: "space-between"
                     }}>
-                        <h5>Author: {this.state.by}</h5>
+                        <h5>Author: {this.props.story.by}</h5>
                     </div>
                     <div className="card-body">
-                        <h5>{this.state.title}</h5>
+                        <h5>{this.props.story.title}</h5>
                     </div>
                     <div className="card-footer" style={{
                         display: "flex",
                         justifyContent: "space-between"
                     }}>
-                       <h5>Score: {this.state.score}</h5> {new Date(this.state.time * 1000).toLocaleString("ru-RU")}
+                       <h5>Score: {this.props.story.score}</h5> {this.props.story.time && new Date(this.props.story.time * 1000).toLocaleString("ru-RU")}
                     </div>
                 </div>
-                {this.state.isFullStoryOpen &&
-                <>
-                <FullStory state={this.state}/>
-                </>
-                }
+            
             </>
         )
     }
 }
+
+

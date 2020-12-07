@@ -1,5 +1,4 @@
 import React from "react";
-import { StoryState } from "./SingleStory";
 
 // interface SingleCommentState {
 //     commentNumber: string;

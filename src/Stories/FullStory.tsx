@@ -1,15 +1,8 @@
 import * as React from 'react';
 import { SingleComment } from './SingleComment';
-import { StoryState } from './SingleStory'
-
-interface FullStoryProps {
-    state: StoryState
-}
 
 
-
-
-export default class FullStory extends React.Component<FullStoryProps> {
+export default class FullStory extends React.Component {
     state = {
         by: "",
         descendants: 0,
@@ -30,7 +23,7 @@ export default class FullStory extends React.Component<FullStoryProps> {
     }
 
     componentDidMount() {
-        this.getSingleStory(this.props.state.id)
+        this.getSingleStory(this.state.id)
             .then((data) => {
                 this.setState({
                     by: data.by,
