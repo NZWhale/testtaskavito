@@ -1,55 +1,31 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
+import { StateInterface, Story } from '../types';
 import { SingleComment } from './SingleComment';
 
+interface PropsFromState {
+    currentStory: Story;
+}
 
-export default class FullStory extends React.Component {
-    state = {
-        by: "",
-        descendants: 0,
-        id: 0,
-        kids: [],
-        score: 0,
-        time: 0,
-        title: "",
-        type: "",
-        url: ""
+interface FullStoryProps extends PropsFromState {
+    currentStory: Story
+}
+
+class FullStory extends React.Component<FullStoryProps & RouteComponentProps> {
+    handleClick = () => {
+        this.props.history.push("/mainpage");
     }
-
-    getSingleStory(storyNumber: number) {
-        let story = fetch(`https://hacker-news.firebaseio.com/v0/item/${storyNumber}.json?print=pretty`)
-            .then(response => response.json())
-            .then((data) => data)
-        return story
-    }
-
-    componentDidMount() {
-        this.getSingleStory(this.state.id)
-            .then((data) => {
-                this.setState({
-                    by: data.by,
-                    descendants: data.descendants,
-                    id: data.id,
-                    kids: data.kids,
-                    score: data.score,
-                    time: data.time,
-                    title: data.title,
-                    type: data.type,
-                    url: data.url,
-                })
-                console.log(this.state)
-            })
-
-    }
-
-
     render() {
-        if (!this.state.kids) {
-            return null
+        let commentsList
+        if (this.props.currentStory.kids) {
+            commentsList = this.props.currentStory.kids.map((kid, index) =>
+                <SingleComment key={index.toString()}
+                    kid={kid} />
+            )
+        } else {
+            commentsList = null
         }
-        const commentsList = this.state.kids.map((kid, index) =>
-            <SingleComment key={index.toString()}
-                kid={kid} />
-        )
         return (
             <div className="card" style={{marginBottom: "20px"}
             }>
@@ -61,26 +37,32 @@ export default class FullStory extends React.Component {
                             display: "flex",
                             flexDirection: "column"                        
                     }}>
-                    <a href={this.state.url} >Link to story</a>
-                    <button className="btn btn-outline-secondary">back</button>
+                    {/* <a href={this.props.currentStory.url} >Link to story</a> */}
+                    <button className="btn btn-outline-secondary" onClick={() => this.handleClick()}>back</button>
                     </div>
-                    <h5>Author: {this.state.by}</h5>
+                    <h5>Author: {this.props.currentStory.by}</h5>
                 </div>
                 <div className="card-body" style={{ 
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                 }}>
-                    <h5 className="card-header">{this.state.title}</h5>
+                    <h5 className="card-header"><a href={this.props.currentStory.url} >{this.props.currentStory.title}</a></h5>
                     <div style={{ marginTop: "12px", marginBottom: "12px", width: "300px" }} className="card">{commentsList}</div>
                 </div>
                 <div className="card-footer" style={{
                     display: "flex",
                     justifyContent: "space-between"
                 }}>
-                    <h5>Score: {this.state.score}</h5> {new Date(this.state.time * 1000).toLocaleString("ru-RU")}
+                    <h5>Score: {this.props.currentStory.score}</h5> {this.props.currentStory.time && new Date(this.props.currentStory.time * 1000).toLocaleString("ru-RU")}
                 </div>
             </div >
         )
     }
 }
+
+const mapStateToProps = (state: StateInterface): PropsFromState => ({currentStory: state.currentStory})
+
+
+export default connect(mapStateToProps)(FullStory);
+

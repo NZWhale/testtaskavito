@@ -7,6 +7,7 @@ import updateButton from "./update.png"
 import setNewStories from '../store/actionCreators/setNewStories';
 import store from '../store/store';
 import setNewStoriesIds from '../store/actionCreators/setNewStoriesIds';
+import { RouteComponentProps } from 'react-router-dom';
 
 
 interface PropsFromState {
@@ -19,7 +20,7 @@ interface MainPageProps extends PropsFromState {
     dispatch: (action: Action<any>) => void
 }
 
-export class MainPage extends React.Component<MainPageProps> {
+export class MainPage extends React.Component<MainPageProps & RouteComponentProps> {
     interval!: NodeJS.Timer;
     storiesList!: JSX.Element[]
     updateButtonUrl = updateButton
@@ -41,7 +42,6 @@ export class MainPage extends React.Component<MainPageProps> {
                     return data
                 })
         ))
-        // store.dispatch(setNewStories(allStories))
                 return Promise.all(promises)
     }
 
@@ -60,7 +60,6 @@ export class MainPage extends React.Component<MainPageProps> {
 
     componentDidMount() {
         this.setNewStories()
-        // this.setStoriesList()
         this.interval = setInterval(() => this.setNewStories(), 60000)
     }
 
@@ -71,7 +70,7 @@ export class MainPage extends React.Component<MainPageProps> {
 
     render() {
         this.storiesList = this.props.newStories.map((story, index) =>
-        <SingleStory key={index.toString()}
+        <SingleStory history={this.props.history} location={this.props.location} match={this.props.match} key={index.toString()}
             story={story} isStoryOpen={this.props.isStoryOpen} />
     )
         return (

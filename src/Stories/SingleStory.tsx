@@ -1,20 +1,34 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.css';
-import FullStory from "./FullStory";
-import { connect } from "react-redux";
 import Action, { StateInterface, Story } from "../types";
+import setIsStoryOpen from "../store/actionCreators/setStoryIsOpen";
+import store from "../store/store";
+import setCurrentStory from "../store/actionCreators/setCurrentStory";
+import { withRouter } from "react-router";
+import { RouteComponentProps } from "react-router-dom";
 
 
-interface StoryProps {
+interface StoryProps extends RouteComponentProps{
     story: Story,
     isStoryOpen: boolean
 }
 
 export class SingleStory extends React.Component<StoryProps> {
+
+
+    handleClick = () => {
+        this.props.history.push("/fullstory");
+    }
     render() {
         return (
             <>
-                <div className="card" style={{ marginBottom: "20px" }} onClick={() => this.setState({isFullStoryOpen: true})}>
+                <div className="card" style={{ marginBottom: "20px" }} onClick={() => {
+                    store.dispatch(setIsStoryOpen(true))
+                    store.dispatch(setCurrentStory(this.props.story))
+                    this.handleClick()
+                    console.log(this.props.isStoryOpen)
+                    console.log(this.props.story)
+                }}>
                     <div className="card-header" style={{
                         display: "flex",
                         justifyContent: "space-between"
@@ -38,3 +52,4 @@ export class SingleStory extends React.Component<StoryProps> {
 }
 
 
+export default withRouter(SingleStory);
