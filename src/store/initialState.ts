@@ -1,4 +1,4 @@
-import { StateInterface } from "../types"
+import { StateInterface, Story } from "../types"
 
 
 
