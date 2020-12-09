@@ -15,6 +15,8 @@ const reducer = (state = initialState, action: Action<any>): StateInterface => {
             return { ...state, currentStory: action.payload}
         case "SET_LOAD_STATUS":
             return { ...state, isContentLoaded: action.payload}
+        case "SET_CURRENT_COMMENTS":
+            return { ...state, currentComments: action.payload}
     }
     return state
 }

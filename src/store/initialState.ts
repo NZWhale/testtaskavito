@@ -7,7 +7,8 @@ const initialState: StateInterface = {
     newStories: [],
     isStoryOpen: false,
     currentStory: {},
-    isContentLoaded: false
+    isContentLoaded: false,
+    currentComments: []
 }
 
 export default initialState

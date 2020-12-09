@@ -87,10 +87,15 @@ export class MainPage extends React.Component<MainPageProps & RouteComponentProp
 
 
     render() {
-        const storiesList = this.props.newStories.map((story, index) =>
+        const storiesList = this.props.newStories.filter((story) => {
+            if(story === null) {
+                return false
+            }
+            return true
+        }).map((story, index) =>
             <SingleStory history={this.props.history} location={this.props.location} match={this.props.match} key={index.toString()}
                 story={story} isStoryOpen={this.props.isStoryOpen} />
-        )
+                )
         return (
             <>
                 <Loader style={{marginTop: "50%", marginLeft: "40%"}}

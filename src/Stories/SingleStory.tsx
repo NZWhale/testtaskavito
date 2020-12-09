@@ -22,12 +22,10 @@ export class SingleStory extends React.Component<StoryProps> {
     render() {
         return (
             <>
-                <div className="card" style={{ marginBottom: "20px" }} onClick={() => {
+                <div className="card" style={{ marginBottom: "20px", cursor:"pointer" }} onClick={() => {
                     store.dispatch(setIsStoryOpen(true))
                     store.dispatch(setCurrentStory(this.props.story))
                     this.handleClick()
-                    console.log(this.props.isStoryOpen)
-                    console.log(this.props.story)
                 }}>
                     <div className="card-header" style={{
                         display: "flex",

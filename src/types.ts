@@ -3,12 +3,24 @@ export default interface Action<T> {
     payload: T;
 }
 
-export interface StateInterface{
+export interface StateInterface {
     newStoriesIds: Array<string>,
     newStories: Array<Story>,
     isStoryOpen: boolean,
     currentStory: Story,
-    isContentLoaded: boolean
+    isContentLoaded: boolean,
+    currentComments: Array<Comment_> | null,
+}
+
+export interface Comment_ {
+    deleted?: boolean,
+    by?: string,
+    id?: number,
+    kids?: Array<number>,
+    parent?: number,
+    text: string,
+    time?: number,
+    type?: string
 }
 
 export interface Story {
