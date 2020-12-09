@@ -60,7 +60,6 @@ export class MainPage extends React.Component<MainPageProps & RouteComponentProp
                 const allStories = await this.getStories()
                 store.dispatch(setNewStories(allStories))
                 store.dispatch(setLoadStatus(true))
-                console.log(this.props.isContentLoaded)
             })
     }
 

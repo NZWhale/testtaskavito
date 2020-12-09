@@ -36,8 +36,6 @@ export class SingleComment extends React.Component<SingleCommentProps> {
         const set = async () => {
             const commentsList: Array<Comment> | null = await this.getCommentsList()
             this.setState({ kidsComments: commentsList })
-            console.log(this.state.kidsComments)
-
         }
         set()
     }
