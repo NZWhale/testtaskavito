@@ -24,30 +24,33 @@ class FullStory extends React.Component<FullStoryProps & RouteComponentProps> {
                     kid={kid} />
             )
         } else {
-            commentsList = null
+            commentsList = "No comments here."
         }
         return (
-            <div className="card" style={{marginBottom: "20px"}
+            <div className="card" style={{ marginTop: "50%" }
             }>
                 <div className="card-header" style={{
                     display: "flex",
                     justifyContent: "space-between"
                 }}>
                     <div style={{
-                            display: "flex",
-                            flexDirection: "column"                        
+                        display: "flex",
+                        flexDirection: "column"
                     }}>
-                    {/* <a href={this.props.currentStory.url} >Link to story</a> */}
-                    <button className="btn btn-outline-secondary" onClick={() => this.handleClick()}>back</button>
+                        <button className="btn btn-outline-secondary" onClick={() => this.handleClick()}>back</button>
                     </div>
                     <h5>Author: {this.props.currentStory.by}</h5>
                 </div>
-                <div className="card-body" style={{ 
+                <div className="card-body" style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                 }}>
-                    <h5 className="card-header"><a href={this.props.currentStory.url} >{this.props.currentStory.title}</a></h5>
+                    <h5 className="card-header" style={{
+                        minWidth: "100%",
+                        textAlign: "center"}}>
+                        <a href={this.props.currentStory.url} >{this.props.currentStory.title}</a>
+                    </h5>
                     <div style={{ marginTop: "12px", marginBottom: "12px", width: "300px" }} className="card">{commentsList}</div>
                 </div>
                 <div className="card-footer" style={{
@@ -61,7 +64,7 @@ class FullStory extends React.Component<FullStoryProps & RouteComponentProps> {
     }
 }
 
-const mapStateToProps = (state: StateInterface): PropsFromState => ({currentStory: state.currentStory})
+const mapStateToProps = (state: StateInterface): PropsFromState => ({ currentStory: state.currentStory })
 
 
 export default connect(mapStateToProps)(FullStory);

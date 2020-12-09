@@ -8,12 +8,18 @@ import setNewStories from '../store/actionCreators/setNewStories';
 import store from '../store/store';
 import setNewStoriesIds from '../store/actionCreators/setNewStoriesIds';
 import { RouteComponentProps } from 'react-router-dom';
+import setLoadStatus from '../store/actionCreators/setLoadStatus';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
+import Loader from 'react-loader-spinner'
+
+
 
 
 interface PropsFromState {
     newStoriesIds: Array<string>
     newStories: Array<Story>
     isStoryOpen: boolean
+    isContentLoaded: boolean
 }
 
 interface MainPageProps extends PropsFromState {
@@ -22,7 +28,6 @@ interface MainPageProps extends PropsFromState {
 
 export class MainPage extends React.Component<MainPageProps & RouteComponentProps> {
     interval!: NodeJS.Timer;
-    storiesList!: JSX.Element[]
     updateButtonUrl = updateButton
 
     getNewStoriesIds() {
@@ -42,7 +47,7 @@ export class MainPage extends React.Component<MainPageProps & RouteComponentProp
                     return data
                 })
         ))
-                return Promise.all(promises)
+        return Promise.all(promises)
     }
 
     setNewStories() {
@@ -51,16 +56,29 @@ export class MainPage extends React.Component<MainPageProps & RouteComponentProp
                 const hundredStories = data.slice(0, 101)
                 store.dispatch(setNewStoriesIds(hundredStories))
             })
-            .then( async () => {
+            .then(async () => {
                 const allStories = await this.getStories()
                 store.dispatch(setNewStories(allStories))
-                console.log(allStories)
+                store.dispatch(setLoadStatus(true))
+                console.log(this.props.isContentLoaded)
+            })
+    }
+
+    updateStories() {
+        this.getNewStoriesIds()
+            .then((data) => {
+                const hundredStories = data.slice(0, 101)
+                store.dispatch(setNewStoriesIds(hundredStories))
+            })
+            .then(async () => {
+                const allStories = await this.getStories()
+                store.dispatch(setNewStories(allStories))
             })
     }
 
     componentDidMount() {
         this.setNewStories()
-        this.interval = setInterval(() => this.setNewStories(), 60000)
+        this.interval = setInterval(() => this.updateStories(), 60000)
     }
 
     componentWillUnmount() {
@@ -69,20 +87,29 @@ export class MainPage extends React.Component<MainPageProps & RouteComponentProp
 
 
     render() {
-        this.storiesList = this.props.newStories.map((story, index) =>
-        <SingleStory history={this.props.history} location={this.props.location} match={this.props.match} key={index.toString()}
-            story={story} isStoryOpen={this.props.isStoryOpen} />
-    )
+        const storiesList = this.props.newStories.map((story, index) =>
+            <SingleStory history={this.props.history} location={this.props.location} match={this.props.match} key={index.toString()}
+                story={story} isStoryOpen={this.props.isStoryOpen} />
+        )
         return (
+            <>
+                <Loader style={{marginTop: "50%", marginLeft: "40%"}}
+                    type="Oval"
+                    color="#00BFFF"
+                    height={100}
+                    width={100}
+                    visible={this.props.isContentLoaded?false:true}
+                />
+                { this.props.isContentLoaded &&
             <>
                 <button
                     className="btn btn-outline-secondary btn-lg btn-block"
                     style={{ marginBottom: '12px', marginTop: '12px' }}
-                    onClick={() => {
-                        console.log(this.props.newStories)
-                    }} // TODO: button to up to date new stories list
+                    onClick={() => this.setNewStories()}
                 >Refresh</button>
-                {this.storiesList}
+                {storiesList}
+            </>
+            }
             </>
         )
     }
@@ -91,7 +118,8 @@ export class MainPage extends React.Component<MainPageProps & RouteComponentProp
 const mapStateToProps = (state: StateInterface): PropsFromState => ({
     newStoriesIds: state.newStoriesIds,
     newStories: state.newStories,
-    isStoryOpen: state.isStoryOpen
+    isStoryOpen: state.isStoryOpen,
+    isContentLoaded: state.isContentLoaded,
 })
 
 export default connect(mapStateToProps)(MainPage);

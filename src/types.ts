@@ -8,6 +8,7 @@ export interface StateInterface{
     newStories: Array<Story>,
     isStoryOpen: boolean,
     currentStory: Story,
+    isContentLoaded: boolean
 }
 
 export interface Story {

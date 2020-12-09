@@ -5,7 +5,7 @@ import MainPage from './MainPage/MainPage'
 import { connect, Provider } from "react-redux";
 import { Router, Switch, Route, Redirect } from "react-router-dom"
 import { createBrowserHistory } from 'history'
-
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import 'bootstrap/dist/css/bootstrap.css';
 import store from './store/store';
 import FullStory from './Stories/FullStory';
